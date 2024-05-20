@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Частотный анализ текста</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: #add8e6; /* Нежно-голубой цвет фона */
+            padding: 50px; /* Отступы вокруг рабочего окна */
+        }
+
+        .card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 5px; /* Removed border and padding */
+        }
+
+        .file-input input[type="file"] {
+            display: none;
+        }
+
+        .file-input label {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .file-input label:hover {
+            background-color: #0056b3;
+        }
+
+        .file-input label i {
+            margin-right: 5px;
+        }
+
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .alert i {
+            margin-right: 10px;
+        }
+
+        .closebtn {
+            margin-left: 15px;
+            color: white;
+            font-weight: bold;
+            float: right;
+            font-size: 22px;
+            line-height: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .closebtn:hover {
+            color: black;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Частотный анализ текста</h1>
+            <div class="alert" id="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="alert-message"></span>
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            </div>
+            <form action="/" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <div class="file-input">
+                    <input type="file" name="file" id="file-input" accept=".txt,.doc,.docx">
+                    <label for="file-input"><i class="fas fa-upload"></i> Добавить файл</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Загрузить</button>
+            </form>
+            <div class="result-container">
+                <div class="result">Самое частое слово: <span id="result">{{ most_frequent_word }}</span></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function validateForm() {
+            var fileInput = document.getElementById("file-input");
+            var file = fileInput.files[0];
+            if (!file) {
+                document.getElementById("alert-message").textContent = "Пожалуйста, выберите файл для загрузки.";
+                document.getElementById("alert").style.display = "block";
+                return false;
+            }
+
+            var allowedExtensions = ['.txt', '.doc', '.docx'];
+            var fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            if (!allowedExtensions.includes(fileExtension)) {
+                document.getElementById("alert-message").textContent = "Неподдерживаемый формат файла. Пожалуйста, выберите файл .txt, .doc или .docx.";
+                document.getElementById("alert").style.display = "block";
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>
+
